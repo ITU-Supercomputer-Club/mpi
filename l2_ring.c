@@ -30,11 +30,12 @@ int main(int argc, char** argv) {
         own_sum += received_sum;
         MPI_Send(&own_sum, 1, MPI_INT, right, TAG, COMM);
     } else {
-        MPI_Send(&own_sum, 1, MPI_INT, right, TAG, COMM);    
-        own_sum += received_sum;
+        MPI_Send(&own_sum, 1, MPI_INT, right, TAG, COMM);
         MPI_Recv(&received_sum, 1, MPI_INT, left, TAG, COMM, &status);
     }
-    printf("Value: %d, Current process: %d, previous process: %d, next process: %d\n", own_sum, rank, left, right);
+    printf("Received sum: %d, Current sum: %d, my rank: %d, rank of left: %d, rank of right: %d\n", received_sum, own_sum, rank, left, right);
+    if (rank == MASTER)
+        printf("Total rank sum is: %d\n", received_sum);
     MPI_Finalize();
 
     return 0;
